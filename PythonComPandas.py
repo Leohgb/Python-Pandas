@@ -1,17 +1,16 @@
 import pandas as pd
+import json
 
 df = pd.read_csv('tmdb_5000_credits.csv')
+print(df.columns.tolist())
 
-print(df.head())
+def extract_characters(cast_str):
+    cast_list = json.loads(cast_str)
+    return [actor['character'] for actor in cast_list]
 
-# Mostrar os dados das colunas 'title' e 'cast'
-print(df[['title', 'cast']])
-
-# Desafio: Demonstrar a disposição de nomes de alguns atores baseados em seus respectivos filmes
 for index, row in df.iterrows():
     title = row['title']
-    cast = row['cast']
-    # Supondo que a coluna 'cast' contenha nomes separados por vírgula
-    actors = cast.split(', ')
-    for actor in actors:
-        print(f'{title} | {actor}')
+    characters = extract_characters(row['cast'])
+    if index <= 10:
+        for character in characters:
+            print(f'{title} | {character}')
